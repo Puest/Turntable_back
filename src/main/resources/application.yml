@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+turn:
+  music-dir: classpath:music/
+
+spring:
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/music/
