@@ -40,6 +40,48 @@ public class TrackController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/tracks/{id}/cover")
+    public ResponseEntity<Resource> getCover(@PathVariable Long id) {
+        return trackService.getTrackById(id)
+                .filter(track -> track.getCoverImage() != null)
+                .map(track -> {
+                    Resource resource = trackService.getCoverResource(track.getCoverImage());
+                    if (!resource.exists()) {
+                        return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+                    }
+                    String filename = track.getCoverImage().toLowerCase();
+                    String mime = filename.endsWith(".png") ? "image/png"
+                               : filename.endsWith(".webp") ? "image/webp"
+                               : "image/jpeg";
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.parseMediaType(mime));
+                    headers.setCacheControl("public, max-age=86400");
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/tracks/{id}/disc")
+    public ResponseEntity<Resource> getDisc(@PathVariable Long id) {
+        return trackService.getTrackById(id)
+                .filter(track -> track.getDiscImage() != null)
+                .map(track -> {
+                    Resource resource = trackService.getCoverResource(track.getDiscImage());
+                    if (!resource.exists()) {
+                        return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+                    }
+                    String filename = track.getDiscImage().toLowerCase();
+                    String mime = filename.endsWith(".png") ? "image/png"
+                               : filename.endsWith(".webp") ? "image/webp"
+                               : "image/jpeg";
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.parseMediaType(mime));
+                    headers.setCacheControl("public, max-age=86400");
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @GetMapping("/tracks/{id}/stream")
     public ResponseEntity<Resource> streamTrack(
             @PathVariable Long id,

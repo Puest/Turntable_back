@@ -22,6 +22,7 @@ public class TrackService {
     private final List<Track> tracks = new ArrayList<>();
     private final ResourceLoader resourceLoader;
     private Path musicDir;
+    private Path coversDir;
 
     private static final String[] LABEL_COLORS = {
         "#cc3333", "#3366cc", "#339933", "#cc9933", "#9933cc",
@@ -41,6 +42,14 @@ public class TrackService {
         } catch (IOException e) {
             // classpath에서 못 찾으면 상대 경로로 시도
             musicDir = Paths.get("src/main/resources/music");
+        }
+
+        // covers 폴더 경로
+        try {
+            Resource coversResource = resourceLoader.getResource("classpath:covers/");
+            coversDir = Paths.get(coversResource.getURI());
+        } catch (IOException e) {
+            coversDir = Paths.get("src/main/resources/covers");
         }
 
         scanMusicDirectory();
@@ -79,8 +88,10 @@ public class TrackService {
                     title = title.substring(0, 1).toUpperCase() + title.substring(1);
 
                     int colorIdx = (int) ((id - 1) % LABEL_COLORS.length);
+                    String coverImage = findCoverImage(nameWithoutExt);
+                    String discImage = findDiscImage(nameWithoutExt);
                     tracks.add(new Track(id, title, "Unknown Artist", "Vinyl Collection",
-                        0, filename, LABEL_COLORS[colorIdx]));
+                        0, filename, LABEL_COLORS[colorIdx], coverImage, discImage));
                 });
 
             System.out.println("[TrackService] Loaded " + tracks.size() + " tracks from " + musicDir);
@@ -102,5 +113,37 @@ public class TrackService {
     public Resource getTrackResource(String filename) {
         Path filePath = musicDir.resolve(filename);
         return new FileSystemResource(filePath.toFile());
+    }
+
+    public Resource getCoverResource(String coverImage) {
+        Path filePath = coversDir.resolve(coverImage);
+        return new FileSystemResource(filePath.toFile());
+    }
+
+    private String findCoverImage(String nameWithoutExt) {
+        if (!Files.exists(coversDir)) return null;
+        String[] extensions = {".jpg", ".jpeg", ".png", ".webp"};
+        for (String ext : extensions) {
+            Path candidate = coversDir.resolve(nameWithoutExt + ext);
+            if (Files.exists(candidate)) {
+                return nameWithoutExt + ext;
+            }
+        }
+        return null;
+    }
+
+    private String findDiscImage(String nameWithoutExt) {
+        if (!Files.exists(coversDir)) return null;
+        String[] suffixes = {"-disc", "-disk"};
+        String[] extensions = {".jpg", ".jpeg", ".png", ".webp"};
+        for (String suffix : suffixes) {
+            for (String ext : extensions) {
+                Path candidate = coversDir.resolve(nameWithoutExt + suffix + ext);
+                if (Files.exists(candidate)) {
+                    return nameWithoutExt + suffix + ext;
+                }
+            }
+        }
+        return null;
     }
 }

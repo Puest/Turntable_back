@@ -8,10 +8,12 @@ public class Track {
     private int durationSeconds;
     private String filename;
     private String coverColor;
+    private String coverImage;
+    private String discImage;
 
     public Track() {}
 
-    public Track(Long id, String title, String artist, String album, int durationSeconds, String filename, String coverColor) {
+    public Track(Long id, String title, String artist, String album, int durationSeconds, String filename, String coverColor, String coverImage, String discImage) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -19,6 +21,8 @@ public class Track {
         this.durationSeconds = durationSeconds;
         this.filename = filename;
         this.coverColor = coverColor;
+        this.coverImage = coverImage;
+        this.discImage = discImage;
     }
 
     public Long getId() { return id; }
@@ -35,4 +39,8 @@ public class Track {
     public void setFilename(String filename) { this.filename = filename; }
     public String getCoverColor() { return coverColor; }
     public void setCoverColor(String coverColor) { this.coverColor = coverColor; }
+    public String getCoverImage() { return coverImage; }
+    public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
+    public String getDiscImage() { return discImage; }
+    public void setDiscImage(String discImage) { this.discImage = discImage; }
 }
