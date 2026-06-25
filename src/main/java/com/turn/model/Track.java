@@ -9,11 +9,13 @@ public class Track {
     private String filename;
     private String coverColor;
     private String coverImage;
+    private long coverVersion;   // 이미지 파일 mtime — 캐시 버스팅용
     private String discImage;
+    private long discVersion;
 
     public Track() {}
 
-    public Track(Long id, String title, String artist, String album, int durationSeconds, String filename, String coverColor, String coverImage, String discImage) {
+    public Track(Long id, String title, String artist, String album, int durationSeconds, String filename, String coverColor, String coverImage, long coverVersion, String discImage, long discVersion) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -22,7 +24,9 @@ public class Track {
         this.filename = filename;
         this.coverColor = coverColor;
         this.coverImage = coverImage;
+        this.coverVersion = coverVersion;
         this.discImage = discImage;
+        this.discVersion = discVersion;
     }
 
     public Long getId() { return id; }
@@ -41,6 +45,10 @@ public class Track {
     public void setCoverColor(String coverColor) { this.coverColor = coverColor; }
     public String getCoverImage() { return coverImage; }
     public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
+    public long getCoverVersion() { return coverVersion; }
+    public void setCoverVersion(long coverVersion) { this.coverVersion = coverVersion; }
     public String getDiscImage() { return discImage; }
     public void setDiscImage(String discImage) { this.discImage = discImage; }
+    public long getDiscVersion() { return discVersion; }
+    public void setDiscVersion(long discVersion) { this.discVersion = discVersion; }
 }

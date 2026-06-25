@@ -6,3 +6,7 @@ target/
 *.swp
 .DS_Store
 Thumbs.db
+
+# 음원 / 커버·디스크 이미지 (대용량 — git 추적 제외, 로컬에만 보관)
+src/main/resources/music/
+src/main/resources/covers/
